@@ -18,5 +18,25 @@ namespace Bangazon.DAL
             Context = new BangazonContext();
         }
 
+        public object GetTasks()
+        {
+            return Context.Task.ToList();
+        }
+
+        public void CreateNewTask(string new_task)
+        {
+            Context.Task.Add(new_task).ToString()
+        }
+
+        public void UpdateTask(string name, string description, string status)
+        {
+
+        }
+
+        public void CompletedOn()
+        {
+
+        }
+
     }
 }
