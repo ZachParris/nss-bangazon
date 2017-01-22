@@ -6,7 +6,7 @@ using System.Web;
 
 namespace Bangazon.Models
 {
-    public class Task
+    public class BangazonTask
     {
         [Required]
         public int TaskID { get; set; }

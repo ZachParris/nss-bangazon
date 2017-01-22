@@ -2,12 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using Bangazon.Models;
 
 namespace Bangazon.DAL
 {
     public class BangazonRepo
     {
-        private BangazonContext Context;
+        public BangazonContext Context;
 
         public BangazonRepo(BangazonContext _ctx)
         {
@@ -20,12 +21,13 @@ namespace Bangazon.DAL
 
         public object GetTasks()
         {
-            return Context.Task.ToList();
+            return Context.Tasks.ToList();
         }
 
-        public void CreateNewTask(string new_task)
+        public void AddTask(BangazonTask new_task)
         {
-            Context.Task.Add(new_task).ToString()
+            Context.Tasks.Add(new_task);
+            Context.SaveChanges();
         }
 
         public void UpdateTask(string name, string description, string status)
