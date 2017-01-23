@@ -19,7 +19,7 @@ namespace Bangazon.DAL
             Context = new BangazonContext();
         }
 
-        public object GetTasks()
+        public List<BangazonTask> GetTasks()
         {
             return Context.Tasks.ToList();
         }
@@ -35,9 +35,15 @@ namespace Bangazon.DAL
 
         }
 
-        public void CompletedOn()
+        public BangazonTask RemoveTask(int task_id)
         {
-
+            BangazonTask found_task = Context.Tasks.FirstOrDefault(t => t.TaskID == task_id);
+            if (found_task != null)
+            {
+                Context.Tasks.Remove(found_task);
+                Context.SaveChanges();
+            }
+            return found_task;
         }
 
     }

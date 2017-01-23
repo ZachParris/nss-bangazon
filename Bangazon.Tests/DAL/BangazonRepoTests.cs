@@ -48,7 +48,7 @@ namespace Bangazon.Tests.DAL
             mock_tasks.As<IQueryable<BangazonTask>>().Setup(m => m.ElementType).Returns(query_tasks.ElementType);
             mock_tasks.As<IQueryable<BangazonTask>>().Setup(m => m.GetEnumerator()).Returns(() => query_tasks.GetEnumerator());
 
-            mock_context.Setup(c => c.Tasks).Returns(mock_tasks.Object);
+            mock_context.Setup(c => c.Tasks ).Returns(mock_tasks.Object);
             mock_tasks.Setup(u => u.Add(It.IsAny<BangazonTask>())).Callback((BangazonTask t) => tasks.Add(t));
             mock_tasks.Setup(u => u.Remove(It.IsAny<BangazonTask>())).Callback((BangazonTask t) => tasks.Remove(t));
         }
@@ -61,7 +61,7 @@ namespace Bangazon.Tests.DAL
         }
 
         [TestMethod]
-        public void GetTasksList()
+        public void AddATaskToTasksList()
         {
             ConnectToDatastore();
 
@@ -76,10 +76,44 @@ namespace Bangazon.Tests.DAL
             Repo.AddTask(new_task);
 
             int expected_tasks = 1;
-            int actual_tasks = 1;
+            int actual_tasks = Repo.Context.Tasks.Count();
 
 
             Assert.AreEqual(expected_tasks, actual_tasks);
+        }
+
+        [TestMethod]
+        public void RemoveTaskFromTaskList()
+        {
+            ConnectToDatastore();
+            BangazonTask new_task = new BangazonTask
+            {
+                TaskID = 1,
+                Name = "Some task",
+                Description = "Brief description",
+                OrderStatus = new Status { },
+                CompletedOn = DateTime.Now
+            };
+            BangazonTask newer_task = new BangazonTask
+            {
+                TaskID = 2,
+                Name = "Some task",
+                Description = "Brief description",
+                OrderStatus = new Status { },
+                CompletedOn = DateTime.Now
+            };
+            Repo.AddTask(new_task);
+            Repo.AddTask(newer_task);
+
+            BangazonTask removed_task = Repo.RemoveTask(3);
+
+            int expected_tasks = 1;
+            int actual_tasks = Repo.Context.Tasks.Count();
+
+            Assert.AreEqual(expected_tasks, actual_tasks);
+            Assert.IsNotNull(removed_task);
+
+
         }
 
     }
