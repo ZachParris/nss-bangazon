@@ -1,5 +1,8 @@
-﻿using System;
+﻿using Bangazon.DAL;
+using Bangazon.Models;
+using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -9,10 +12,12 @@ namespace Bangazon.Controllers
 {
     public class TaskController : ApiController
     {
+        BangazonRepo Repo = new BangazonRepo();
+
         // GET: api/Task
-        public IEnumerable<string> Get()
+        public IEnumerable<BangazonTask> Get()
         {
-            return new string[] { "value1", "value2" };
+            return Repo.GetTasks();
         }
 
         // GET: api/Task/5
@@ -22,18 +27,34 @@ namespace Bangazon.Controllers
         }
 
         // POST: api/Task
-        public void Post([FromBody]string value)
+        [HttpPost]
+        public HttpResponseMessage Post([FromBody]BangazonTask value)
         {
+            if (!ModelState.IsValid)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, ModelState);
+            }
+
+            Repo.AddTask(value);
+            return Request.CreateResponse(HttpStatusCode.Created);
         }
 
         // PUT: api/Task/5
-        public void Put(int id, [FromBody]string value)
+        [HttpPut,Route("{id}")]
+        public HttpResponseMessage Put(int id, [FromBody]BangazonTask value)
         {
+            if (!ModelState.IsValid)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, ModelState);
+            }
+            Repo.UpdateTask(value.TaskID);
+            return Request.CreateResponse(HttpStatusCode.Accepted);
         }
 
         // DELETE: api/Task/5
         public void Delete(int id)
         {
+            Repo.RemoveTask(id);
         }
     }
 }

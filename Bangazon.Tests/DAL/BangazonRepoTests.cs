@@ -70,7 +70,7 @@ namespace Bangazon.Tests.DAL
                 TaskID = 1,
                 Name = "Some task",
                 Description = "Brief description",
-                OrderStatus = new Status { },
+                OrderStatus = Status.ToDo,
                 CompletedOn = DateTime.Now
             };
             Repo.AddTask(new_task);
@@ -91,7 +91,7 @@ namespace Bangazon.Tests.DAL
                 TaskID = 1,
                 Name = "Some task",
                 Description = "Brief description",
-                OrderStatus = new Status { },
+                OrderStatus = Status.ToDo,
                 CompletedOn = DateTime.Now
             };
             BangazonTask newer_task = new BangazonTask
@@ -99,21 +99,37 @@ namespace Bangazon.Tests.DAL
                 TaskID = 2,
                 Name = "Some task",
                 Description = "Brief description",
-                OrderStatus = new Status { },
+                OrderStatus = Status.ToDo,
                 CompletedOn = DateTime.Now
             };
             Repo.AddTask(new_task);
             Repo.AddTask(newer_task);
 
-            BangazonTask removed_task = Repo.RemoveTask(3);
+            BangazonTask removed_task = Repo.RemoveTask(2);
 
             int expected_tasks = 1;
             int actual_tasks = Repo.Context.Tasks.Count();
 
             Assert.AreEqual(expected_tasks, actual_tasks);
-            Assert.IsNotNull(removed_task);
+        }
 
+        [TestMethod]
+        public void EditTaskInTaskList()
+        {
+            ConnectToDatastore();
 
+            BangazonTask task = new BangazonTask
+            {
+                TaskID = 1,
+                Name = "Updated task",
+                Description = "Brief description",
+                OrderStatus = Status.ToDo,
+                CompletedOn = DateTime.Now
+            };
+
+            Repo.UpdateTask(task);
+
+            Assert.IsNotNull(task);
         }
 
     }
