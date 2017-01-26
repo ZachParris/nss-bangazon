@@ -75,7 +75,7 @@ namespace Bangazon.Tests.DAL
             };
             Repo.AddTask(new_task);
 
-            int expected_tasks = 1;
+            int expected_tasks = 3;
             int actual_tasks = Repo.Context.Tasks.Count();
 
 
@@ -107,7 +107,7 @@ namespace Bangazon.Tests.DAL
 
             BangazonTask removed_task = Repo.RemoveTask(2);
 
-            int expected_tasks = 1;
+            int expected_tasks = 3;
             int actual_tasks = Repo.Context.Tasks.Count();
 
             Assert.AreEqual(expected_tasks, actual_tasks);
@@ -130,6 +130,28 @@ namespace Bangazon.Tests.DAL
             Repo.UpdateTask(task);
 
             Assert.IsNotNull(task);
+        }
+
+        [TestMethod]
+        public void GetTasksByStatus()
+        {
+            ConnectToDatastore();
+
+            BangazonTask task = new BangazonTask
+            {
+                TaskID = 1,
+                Name = "Updated task",
+                Description = "Brief description",
+                OrderStatus = Status.Complete,
+                CompletedOn = DateTime.Now
+            };
+            Repo.AddTask(task);
+
+            int expected = 1;
+            int actual = Repo.GetTaskStatusList(2).Count();
+
+            Assert.AreEqual(expected, actual);
+            
         }
 
     }

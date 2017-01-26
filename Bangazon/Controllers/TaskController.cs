@@ -47,7 +47,7 @@ namespace Bangazon.Controllers
             {
                 return Request.CreateErrorResponse(HttpStatusCode.BadRequest, ModelState);
             }
-            Repo.UpdateTask(value.TaskID);
+            Repo.UpdateTask(value);
             return Request.CreateResponse(HttpStatusCode.Accepted);
         }
 

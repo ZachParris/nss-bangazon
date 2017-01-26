@@ -50,10 +50,20 @@ namespace Bangazon.DAL
                 found_task.Description = task.Description;
                 found_task.OrderStatus = task.OrderStatus;
 
+                if(task.OrderStatus == Status.Complete)
+                {
+                    found_task.CompletedOn = DateTime.Now;
+                }
+               
                 Context.SaveChanges();
                 
             }
             return found_task;
+        }
+
+        public List<BangazonTask> GetTaskStatusList(int statusId)
+        {
+            return Context.Tasks.Where(t => t.OrderStatus == (Status)statusId).ToList();
         }
     }
 }
