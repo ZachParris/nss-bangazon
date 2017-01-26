@@ -19,17 +19,20 @@ namespace Bangazon.DAL
             Context = new BangazonContext();
         }
 
+        //Gets complete task list
         public List<BangazonTask> GetTasks()
         {
             return Context.Tasks.ToList();
         }
 
+        //Adds new task to DB
         public void AddTask(BangazonTask new_task)
         {
             Context.Tasks.Add(new_task);
             Context.SaveChanges();
         }
 
+        //Remove single selected task by it's ID
         public BangazonTask RemoveTask(int task_id)
         {
             BangazonTask found_task = Context.Tasks.FirstOrDefault(t => t.TaskID == task_id);
@@ -41,6 +44,7 @@ namespace Bangazon.DAL
             return found_task;
         }
 
+        //Edits and Updates selected task by Id, also updates completion date once completed
         public BangazonTask UpdateTask(BangazonTask task)
         {
             BangazonTask found_task = Context.Tasks.SingleOrDefault(t => t.TaskID == task.TaskID);
@@ -61,6 +65,7 @@ namespace Bangazon.DAL
             return found_task;
         }
 
+        //Returns list of tasks according to current status
         public List<BangazonTask> GetTaskStatusList(int statusId)
         {
             return Context.Tasks.Where(t => t.OrderStatus == (Status)statusId).ToList();
